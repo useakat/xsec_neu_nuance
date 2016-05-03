@@ -1,0 +1,8 @@
+*** Begin of history file: Sun Oct 13 12:48:07 2013
+sh ls
+sh ./run.sh
+sh e run.sh
+sh emacs run.sh
+sh emacs CCQEcut.kumac
+quit
+*** End   of history file: Sun Oct 13 15:47:42 2013

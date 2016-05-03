@@ -1,0 +1,72 @@
+* This kumac generates CCQE Erec distribution for a neutrino 
+* monocromatic beam after CCQE cut and detector smearing of the 
+* lepton momentum and angle.
+* This also produce Figure2 in re-evaluation paper, JHEP07(2009)031. 
+*
+* Yoshitaro Takaesu 2013/Oct/25 @KIAS
+********** Arguments **********************************************
+nu = [1]
+Enu = [2]
+maqe = [3]
+mares = [4]
+************** parameters ****************************************
+* plot range
+xmin = 1
+xmax = 1600
+ymin = 0
+ymax = 18000
+
+* text region
+set chhe 0.6
+leg_top = 0.9
+leg_left = 0.05
+dleg = 0.05
+
+* legend positions
+cfon = -20
+*key_top = [leg_top]-[dleg]*5
+key_top = 0.8
+key_left = 0.1
+dkey = 0.06
+
+* axis titles
+xtitle = 'Erec (MeV)'
+ytitle = 'Events/10MeV'
+set xmgl 3
+set xlab 2
+set ylab 1.3
+************** Codes *********************************************
+file = [1][2]_cc_[3]_[4]
+h/file 21 [file].hbk
+
+Dx = [xmax] -[xmin]
+Dy = [ymax] -[ymin] 
+nbins = [xmax]/10
+
+h/create/1d 100 '' [nbins] [xmin] [xmax]
+nt/project 100 1.Erec_ccqe_nosmear.f
+
+h/create/1d 110 '' [nbins] [xmin] [xmax]
+nt/project 110 1.Erec_ccqe.f
+
+*opt nstat
+set hcol 4
+h/pl 100
+set hcol 2
+h/pl 110 s
+set txci 1
+
+atitle [xtitle] [ytitle] ! 220
+
+itx [Dx]*[leg_left]+[xmin] [Dy]*([leg_top]-[dleg]*0)+[ymin] '(a) Enu = 1 GeV'
+
+set plci 4; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*0) 1 'Before smearing' 1 L
+set plci 2; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*1) 1 'After smearing' 1 L
+set txci 1
+
+pic/print [file].eps
+
+cd //PAWC
+
+h/hscratch *
+close 21

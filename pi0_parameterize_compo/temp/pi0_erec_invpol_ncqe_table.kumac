@@ -1,0 +1,36 @@
+* This kumac generates 1pi^0 Erec distribution table for a neutrino
+* monocromatic beam after detector smearing, 1pi0 cut.
+*
+* Yoshitaro Takaesu 2013/Nov/4 @KIAS
+************** parameters ****************************************
+xmin = 0
+xmax = 6000
+binsize = 50
+input = tmp.hbk
+output = tmp.dat
+************** Codes *********************************************
+h/file 21 [input]
+nbins = ([xmax] -[xmin])/[binsize]
+
+h/create/1d 100 '' [nbins] [xmin] [xmax]
+nt/project 100 1.erec_1pi0.f pi0cut_invpolwgt_ncqe.f
+
+v/cre x([nbins]) r
+v/cre y([nbins]) r
+v/cre x2([nbins]) r
+v/cre y2([nbins]) r
+h/get_vect/abscissa 100 x
+h/get_vect/contents 100 y
+sumy = $SIGMA(vsum(y))
+if ([sumy] > 0) then
+   scale = 1/[sumy] 
+else
+   scale = 0
+endif
+v/operations/vscale y [scale] y2
+v/operations/vscale x 0.001 x2
+v/write x2,y2 [output] 'f10.5,1x,f10.7'
+
+cd //PAWC
+v/del *
+close 21

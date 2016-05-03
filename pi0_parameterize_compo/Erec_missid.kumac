@@ -1,0 +1,94 @@
+* This kumac generates pi^0 erec distribution for a neutrino 
+* monocromatic beam after CCQE cut and miss ID (polfit)
+* Note: No detector smearing included yet
+*
+* Yoshitaro Takaesu 2013/Oct/25 @KIAS
+********** Arguments **********************************************
+nu = [1]
+Enu = [2]
+maqe = [3]
+mares = [4]
+************** parameters ****************************************
+* plot range
+xmin = 0
+xmax = 5100
+ymin = 0
+ymax = 35
+
+* text region
+leg_top = 0.97
+leg_left = 0.05
+dleg = 0.05
+
+* legend positions
+*key_top = [leg_top]-[dleg]*5
+key_top = 0.99
+key_left = 0.45
+dkey = 0.04
+
+* axis titles
+xtitle = 'Erec (pi0) (MeV)'
+ytitle = 'Events/10MeV'
+set xlab 1.5
+set ylab 1.3
+************** Codes *********************************************
+file = [1][2]_[3]_[4]
+h/file 21 [file].hbk
+*h/file 21 ae1000_ma1100.hbk 
+*h/file 21 ae2000_1030_1100.hbk 
+*h/file 21 ae3000_1030_1100.hbk 
+*h/file 21 ae1000_noco_1030_1100.hbk 
+
+Dx = [xmax] -[xmin]
+Dy = [ymax] -[ymin] 
+nbins = [xmax]/10
+
+h/create/1d 100 '' [nbins] [xmin] [xmax]
+nt/project 100 1.Erec.f missidwgt.f
+
+h/create/1d 110 '' [nbins] [xmin] [xmax]
+nt/project 110 1.Erec.f missidwgt_rs.f
+
+h/create/1d 120 '' [nbins] [xmin] [xmax]
+nt/project 120 1.Erec.f missidwgt_codf.f
+
+h/create/1d 130 '' [nbins] [xmin] [xmax]
+nt/project 130 1.Erec.f missidwgt_di.f
+
+h/create/1d 140 '' [nbins] [xmin] [xmax]
+nt/project 140 1.Erec.f missidwgt_qe.f
+
+opt nstat
+set hcol 1
+h/pl 100
+set hcol 2
+*fun/plot 350*exp(-(x-1000)**2/(2*300**2)) 0 5100 s
+*h/pl 110 s
+set hcol 4
+*h/pl 120 s
+set hcol 3
+*h/pl 130 s
+set hcol 6
+*h/pl 140 s
+set txci 1
+
+atitle [xtitle] [ytitle] ! 220
+
+itx [Dx]*[leg_left]+[xmin] [Dy]*([leg_top]-[dleg]*0)+[ymin] 'anti-nue 2 GeV'
+itx [Dx]*[leg_left]+[xmin] [Dy]*([leg_top]-[dleg]*1)+[ymin] 'H2O target'
+itx [Dx]*[leg_left]+[xmin] [Dy]*([leg_top]-[dleg]*2)+[ymin] 'mA(QE) = 1.03 GeV'
+itx [Dx]*[leg_left]+[xmin] [Dy]*([leg_top]-[dleg]*3)+[ymin] 'mA(Res) = 1.1 GeV'
+
+set plci 1; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*0) 1 'All' 1 L
+set plci 2; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*1) 1 'Resonant' 1 L
+set plci 4; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*2) 1 'Coh. & Dif.' 1 L
+set plci 3; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*3) 1 'DIS' 1 L
+set plci 6; key [Dx]*[key_left]+[xmin] [Dy]*([key_top]-[dkey]*4) 1 'CCQE' 1 L
+set txci 1
+
+pic/print [file].eps
+
+cd //PAWC
+
+h/hscratch *
+close 21

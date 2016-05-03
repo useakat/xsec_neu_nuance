@@ -1,0 +1,9 @@
+ Version 1.29/04 of HIGZ started
+ *** Using default PAWLOGON file "/home/th/takaesu/.pawlogon.kumac"
+
+
+ =====> ID =     100   cut 
+         ENTRIES    =     1000          ALL CHANN = 1000.000    
+         UNDERFLOW  = 0.000000          OVERFLOW  = 0.000000    
+         MEAN VALUE = 1.010000          R . M . S =0.6008655E-08
+ Exiting from PAW.

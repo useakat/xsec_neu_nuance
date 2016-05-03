@@ -1,0 +1,18 @@
+*set *fon -60
+*set *siz 0.3
+set vfon -10
+set vsiz 0.5
+set lfon -20
+set asiz 0.6
+set txfp -20
+set chhe 0.5
+set cfon -20
+set csiz 0.5
+
+opt date
+opt tic
+opt zfl 1
+set ymgu 1.3
+set xmgl 2.5
+set ymgl 2.2
+set xmgr 1

@@ -1,0 +1,9 @@
+*.dat
+*~
+output/*
+*.log
+date_server.txt
+date.txt
+*.hbk
+*.kumacold
+*.out

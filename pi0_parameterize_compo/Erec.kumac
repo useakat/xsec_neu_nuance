@@ -1,0 +1,42 @@
+h/file 21 ae1000_ma1100.hbk 
+
+xmin = 0
+xmax = 3000
+nbins = [xmax]/10
+h/create/1d 100 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 100 1.Erec.f
+
+h/create/1d 110 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 110 1.Erec_qe.f
+
+h/create/1d 120 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 120 1.Erec_df.f
+
+h/create/1d 130 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 130 1.Erec_co.f
+
+h/create/1d 140 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 140 1.Erec_di.f
+
+h/create/1d 150 'Erec ([p]^0!)  (MeV)' [nbins] [xmin] [xmax]
+nt/project 150 1.Erec_rs.f
+
+opt stat
+h/pl 100
+h/pl 110 s
+h/pl 120 s
+h/pl 130 s
+h/pl 140 s
+h/pl 150 s
+set txci 1
+key 2000 140 1 'All' 1 L
+key 2000 130 2 'CCQE' 1 L
+key 2000 120 3 'Diffractive' 1 L
+key 2000 110 3 'Coherent' 1 L
+key 2000 100 3 'Deep Inelastic' 1 L
+key 2000 90 3 'Resonant' 1 L
+
+cd //PAWC
+
+h/hscratch *
+close 21

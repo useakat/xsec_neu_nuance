@@ -1,0 +1,7 @@
+h/file 21 pi0dist/nm25_[1][2].hbk
+h/create/1d 25 'Erec ([p]^0!)  (MeV)' 15 0 3000
+nt/project 25 1.Erec_missid.f
+
+h/hscratch 25
+close 21
+

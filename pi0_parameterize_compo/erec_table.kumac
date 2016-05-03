@@ -1,0 +1,66 @@
+* This kumac generates 1pi^0 Erec distribution table for a neutrino
+* monocromatic beam after detector smearing, CCQE cut and miss ID (polfit)
+*
+* Yoshitaro Takaesu 2013/Oct/26 @KIAS
+************** parameters ****************************************
+xmin = 0
+xmax = 6000
+binsize = 50
+input = tmp.hbk
+output = tmp.dat
+************** Codes *********************************************
+h/file 21 [input]
+nbins = ([xmax] -[xmin])/[binsize]
+
+h/create/1d 100 '' [nbins] [xmin] [xmax]
+h/create/1d 200 '' [nbins] [xmin] [xmax]
+h/create/1d 300 '' [nbins] [xmin] [xmax]
+nt/project 100 1.erec_1pi0.f missidwgt.f
+nt/project 200 1.erec_1pi0.f pi0cut_ncrs.f
+nt/project 300 1.erec_1pi0.f pi0cut_ncco.f
+v/cre x([nbins]) r
+v/cre xx([nbins]) r
+h/get_vect/abscissa 100 x
+v/operations/vscale x 0.001 xx
+
+* Total
+v/cre y1([nbins]) r
+v/cre yy1([nbins]) r
+h/get_vect/contents 100 y1
+sumy = $SIGMA(vsum(y1))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/operations/vscale y1 [scale] yy1
+
+* NCRS
+v/cre y2([nbins]) r
+v/cre yy2([nbins]) r
+h/get_vect/contents 200 y2
+sumy = $SIGMA(vsum(y2))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/operations/vscale y2 [scale] yy2
+
+* NCCO
+v/cre y3([nbins]) r
+v/cre yy3([nbins]) r
+h/get_vect/contents 100 y3
+sumy = $SIGMA(vsum(y3))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/operations/vscale y3 [scale] yy3
+
+v/write xx,0,yy2,0,yy3,yy1 [output] 'f10.5,1x,f10.5,1x,f10.5,1x,f10.5,1x,f10.5,1x,f10.5'
+
+cd //PAWC
+v/del *
+close 21

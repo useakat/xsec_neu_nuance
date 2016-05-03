@@ -1,0 +1,37 @@
+*** Begin of history file: Thu Jul 18 22:49:36 2013
+h/file 3 ne.n1000.all.hbk
+h/list
+h/pl 10000
+usage h/list
+ve/list
+nt/print
+nt/print 2
+nt/print 3
+nt/print 1
+nt/print 100
+h/list
+h/pl 1000
+nt/pri
+nt/plot 1.p_neutrino(4)
+nt/plot 1.p_lepton(5,n_leptons)
+help command
+nt/plot cc
+nt/plot 1.cc
+nt/plot 1.neutrino
+h/create/1d 100 'neutrino type' 20 0. 20.
+h/create/1d 111 'neutrino type' 20 0. 20.
+nt/project 111 1.neutrino
+nt/project 100 1.neutrino
+nt/plot 1.target
+opt stat
+nt/plot 1.target
+nt/plot 1.channel
+nt/plot 1.p_neutrino(1)
+nt/plot 1.p_neutrino(2)
+nt/plot 1.p_neutrino(3)
+nt/plot 1.p_neutrino(4)
+nt/plot 1.lepton
+nt/plot 1.n_had
+nt/plot 1.n_hadrons
+nt/plot 1.hadron
+*** End   of history file: Fri Jul 19 02:17:31 2013

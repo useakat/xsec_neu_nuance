@@ -1,0 +1,95 @@
+* This kumac generates 1pi^0 Erec distribution table for a neutrino
+* monocromatic beam after detector smearing, CCQE cut and miss ID (polfit)
+*
+* Yoshitaro Takaesu 2013/Oct/26 @KIAS
+************** parameters ****************************************
+xmin = 0
+xmax = 6000
+binsize = 50
+input = tmp.hbk
+output = tmp.dat
+************** Codes *********************************************
+h/file 21 [input]
+nbins = ([xmax] -[xmin])/[binsize]
+
+h/create/1d 100 '' [nbins] [xmin] [xmax]
+h/create/1d 200 '' [nbins] [xmin] [xmax]
+h/create/1d 300 '' [nbins] [xmin] [xmax]
+h/create/1d 400 '' [nbins] [xmin] [xmax]
+h/create/1d 500 '' [nbins] [xmin] [xmax]
+nt/project 100 1.erec_1pi0.f missidwgt_old.f
+nt/project 200 1.erec_1pi0.f pi0cut_ncqe_oldmissid.f
+nt/project 300 1.erec_1pi0.f pi0cut_ncrs_oldmissid.f
+nt/project 400 1.erec_1pi0.f pi0cut_ncdi_oldmissid.f
+nt/project 500 1.erec_1pi0.f pi0cut_ncco_oldmissid.f
+
+v/cre x([nbins]) r
+v/cre xx([nbins]) r
+h/get_vect/abscissa 100 x
+v/operations/vscale x 0.001 xx
+
+* Total
+v/cre tot([nbins]) r
+v/cre tot1([nbins]) r
+h/get_vect/contents 100 tot
+sumy = $SIGMA(vsum(tot))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/operations/vscale tot [scale] tot1
+
+* NCQE
+v/cre ncqe([nbins]) r
+h/get_vect/contents 200 ncqe
+sumy = $SIGMA(vsum(ncqe))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/cre ncqe2([nbins]) r
+v/operations/vscale ncqe [scale] ncqe2
+
+* NCRS
+v/cre ncrs([nbins]) r
+h/get_vect/contents 300 ncrs
+sumy = $SIGMA(vsum(ncrs))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/cre ncrs2([nbins]) r
+v/operations/vscale ncrs [scale] ncrs2
+
+* NCDI
+v/cre ncdi([nbins]) r
+h/get_vect/contents 400 ncdi
+sumy = $SIGMA(vsum(ncdi))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/cre ncdi2([nbins]) r
+v/operations/vscale ncdi [scale] ncdi2
+
+* NCCO
+v/cre ncco([nbins]) r
+h/get_vect/contents 500 ncco
+sumy = $SIGMA(vsum(ncco))
+if ([sumy] > 0) then
+   scale = 1/[sumy]	
+else
+   scale = 0
+endif
+v/cre ncco2([nbins]) r
+v/operations/vscale ncco [scale] ncco2
+
+v/write xx,ncqe2,ncrs2,ncdi2,ncco2,tot1 [output] 'f10.5,1x,f10.5,1x,f10.5,1x,f10.5,1x,f10.5,1x,f10.5'
+
+cd //PAWC
+v/del *
+close 21
